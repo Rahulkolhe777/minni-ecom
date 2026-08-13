@@ -3,34 +3,17 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
 import { Auth } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { useAuthHook } from "../hooks/useAuthHook";
 
 const LoginPage = () => {
-  const navigate = useNavigate();
+
+  let data = useAuthHook();
+  console.log(data)
    const {registeredUser,
           
           loggedInUser,
           setLoggedInUser,} = useContext(Auth)
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
 
-  let formSubmit = (data) => {
-    let user = registeredUser.find((val)=>{
-      return val.email === data.email && val.password === data.password
-    })
-    reset();
-    if(!user){
-       toast.error("user not found or invalid credentials")
-       return
-    }
-    setLoggedInUser(user)
-    localStorage.setItem("loggedInUser=>",JSON.stringify(user))
-     toast.success("user logged in")
-    navigate("/main")
-  };
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white flex">

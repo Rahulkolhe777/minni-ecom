@@ -18,16 +18,7 @@ const RegisterPage = () => {
   } = useForm();
 
 
-  let formSubmit = (data) => {
-    let arr = [...registeredUser,data]
-    setRegisteredUser(arr);
-    toast.success('registered sucessfully');
-    console.log("registered user=>",arr)
-    navigate("/")
-    localStorage.setItem("registeredUser", JSON.stringify(arr));
-    reset();
-    
-  };
+  ;
 
 
   return (
