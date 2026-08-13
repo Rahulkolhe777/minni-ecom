@@ -1,24 +1,15 @@
-import React, { useContext } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { Auth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import React from "react";
+import { useAuthHook } from "../hooks/useAuthHook";
 
 const RegisterPage = () => {
-  const navigate = useNavigate();
-  const {registeredUser,
-        setRegisteredUser,
-        loggedInUser,
-        setLoggedInUser,} = useContext(Auth)
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
 
 
-  ;
+  let {handleSubmit,register,reset,registerFormSubmit,navigate,errors,toast} = useAuthHook();
+
+
+
+
+ 
 
 
   return (
@@ -44,7 +35,7 @@ const RegisterPage = () => {
 
           <p className="text-gray-500 mt-2">Join SkyMart and start shopping</p>
         </div>
-        <form onSubmit={handleSubmit(formSubmit)}>
+        <form onSubmit={handleSubmit(registerFormSubmit)}>
           {/* Full Name */}
           <div className="mb-5">
             <div className="flex items-center h-13.5 px-4 rounded-2xl bg-[#1d1d1d] border border-white/10 focus-within:border-[#c6ff00]/60 transition">

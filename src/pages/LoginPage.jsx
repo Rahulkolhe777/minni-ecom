@@ -1,19 +1,16 @@
-import React, { useContext } from "react";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
-import { Auth } from "../context/AuthContext";
-import { toast } from "react-toastify";
+import React from "react";
 import { useAuthHook } from "../hooks/useAuthHook";
 
 const LoginPage = () => {
-
-  let data = useAuthHook();
-  console.log(data)
-   const {registeredUser,
-          
-          loggedInUser,
-          setLoggedInUser,} = useContext(Auth)
-
+  let {
+    handleSubmit,
+    register,
+    reset,
+    loginFormSubmit,
+    navigate,
+    errors,
+    toast,
+  } = useAuthHook();
 
   return (
     <div className="min-h-screen bg-[#0d0d0d] text-white flex">
@@ -99,7 +96,7 @@ const LoginPage = () => {
             </div>
 
             {/* FORM */}
-            <form onSubmit={handleSubmit(formSubmit)}>
+            <form onSubmit={handleSubmit(loginFormSubmit)}>
               {/* EMAIL */}
               <div className="mb-5">
                 <div className="flex items-center h-13.5 px-4 rounded-2xl bg-[#1d1d1d] border border-white/10 focus-within:border-[#c6ff00]/60 transition">
@@ -224,7 +221,7 @@ const LoginPage = () => {
               Don't have an account?{" "}
               <button
                 type="button"
-                onClick={() => navigate("/register")}
+                onClick={() => navigate('/register')}
                 className="text-[#c6ff00] font-semibold hover:underline"
               >
                 Create one

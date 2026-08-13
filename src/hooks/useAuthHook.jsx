@@ -1,8 +1,16 @@
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
+import { Auth } from "../context/AuthContext";
+import { toast } from "react-toastify";
 
 export const useAuthHook = () => {
   const navigate = useNavigate();
+   const {registeredUser,
+          setRegisteredUser,
+          loggedInUser,
+          setLoggedInUser,} = useContext(Auth)
+            
 
   const {
     register,
@@ -40,5 +48,8 @@ export const useAuthHook = () => {
     register,
     handleSubmit,
     reset,
+    errors,
+    loginFormSubmit,navigate,
+    registerFormSubmit,toast
   };
 };
