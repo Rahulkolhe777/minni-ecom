@@ -8,6 +8,8 @@ import RegisterPage from "../pages/RegisterPage";
 import MainLayout from "../layout/MainLayout";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoute from "./PublicRoute";
+import About from "../pages/About";
+
 
 const AppRoutes = () => {
   let router = createBrowserRouter([
@@ -38,6 +40,12 @@ const AppRoutes = () => {
         {
           path: "",
           element: <MainLayout />,
+          children:[
+            {
+              path:'about',
+              element:<About/>
+            }
+          ]
         },
       ],
     },

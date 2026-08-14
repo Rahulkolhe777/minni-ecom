@@ -29,7 +29,7 @@ export const useAuthHook = () => {
       return;
     }
     setLoggedInUser(user);
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    localStorage.setItem("loggedInUser=>", JSON.stringify(user));
     toast.success("user logged in");
     navigate("/main");
   };
@@ -38,7 +38,7 @@ export const useAuthHook = () => {
     let arr = [...registeredUser, data];
     setRegisteredUser(arr);
     toast.success("registered sucessfully");
-    console.log("registered user=>", arr);
+    console.log("registered user", arr);
     navigate("/");
     localStorage.setItem("registeredUser", JSON.stringify(arr));
     reset();
