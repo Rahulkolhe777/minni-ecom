@@ -3,7 +3,7 @@ import React from 'react'
 const ProductPage = () => {
   return (
     <div>
-      product
+      product hai bhai mere andar products lega ki land lega
     </div>
   )
 }

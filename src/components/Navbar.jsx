@@ -48,7 +48,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="/shop"
+            to="/main/shop"
             className={({ isActive }) =>
               `font-semibold transition-colors duration-200 ${
                 isActive
@@ -61,7 +61,7 @@ const Navbar = () => {
           </NavLink>
 
           <NavLink
-            to="about"
+            to="/main/about"
             className={({ isActive }) =>
               `font-semibold transition-colors duration-200 ${
                 isActive

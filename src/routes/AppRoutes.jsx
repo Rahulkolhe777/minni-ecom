@@ -1,5 +1,5 @@
-import React, { Children } from "react";
-import { createBrowserRouter } from "react-router";
+import React from "react";
+import { createBrowserRouter, Navigate } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 import AuthLayout from "../layout/AuthLayout";
@@ -9,6 +9,7 @@ import MainLayout from "../layout/MainLayout";
 import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoute from "./PublicRoute";
 import About from "../pages/About";
+import ProductPage from "../pages/ProductPage";
 
 
 const AppRoutes = () => {
@@ -44,8 +45,22 @@ const AppRoutes = () => {
             {
               path:'about',
               element:<About/>
+            },
+            {
+              path:'shop',
+              element:<ProductPage />
             }
           ]
+        },
+      ],
+    },
+    {
+      path: "*",
+      element: <PublicRoute />,
+      children: [
+        {
+          path: "*",
+          element: <Navigate to="/" replace />,
         },
       ],
     },

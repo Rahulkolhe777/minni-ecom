@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   HeartHandshake,
   ArrowRight,
-} from "lucide-react";
+} from "lucide-react"; 
 
 const About = () => {
   return (
@@ -37,7 +37,7 @@ const About = () => {
         {/* Stats */}
         <section className="mt-16 grid grid-cols-2 gap-4 lg:grid-cols-4">
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
+          <div className="rounded-2xl border  border-white bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
             <Package
               className="mx-auto mb-4 text-[#c6ff00]"
               size={27}
@@ -52,7 +52,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
+          <div className="rounded-2xl border  border-white bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
             <Users
               className="mx-auto mb-4 text-[#c6ff00]"
               size={27}
@@ -67,7 +67,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
+          <div className="rounded-2xl border  border-white bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
             <Star
               className="mx-auto mb-4 text-[#c6ff00]"
               size={27}
@@ -82,7 +82,7 @@ const About = () => {
             </p>
           </div>
 
-          <div className="rounded-2xl border border-zinc-800 bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
+          <div className="rounded-2xl border  border-white bg-[#111] p-6 text-center transition hover:border-[#c6ff00]/40">
             <Truck
               className="mx-auto mb-4 text-[#c6ff00]"
               size={27}
@@ -100,7 +100,7 @@ const About = () => {
         </section>
 
         {/* Our Story */}
-        <section className="mt-20 rounded-3xl border border-zinc-800 bg-[#111] p-8 sm:p-10 md:p-14">
+        <section className="mt-20 rounded-3xl border  border-white bg-[#111] p-8 sm:p-10 md:p-14">
 
           <h2 className="text-3xl font-bold sm:text-4xl">
             Our Story
@@ -149,7 +149,7 @@ const About = () => {
           <div className="mt-10 grid gap-5 md:grid-cols-2">
 
             {/* Trust */}
-            <div className="flex gap-5 rounded-2xl border border-zinc-800 bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
+            <div className="flex gap-5 rounded-2xl border border-white bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
               <ShieldCheck
                 size={30}
                 className="shrink-0 text-[#c6ff00]"
@@ -168,7 +168,7 @@ const About = () => {
             </div>
 
             {/* Speed */}
-            <div className="flex gap-5 rounded-2xl border border-zinc-800 bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
+            <div className="flex gap-5 rounded-2xl border border-white bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
               <Truck
                 size={30}
                 className="shrink-0 text-[#c6ff00]"
@@ -187,7 +187,7 @@ const About = () => {
             </div>
 
             {/* Community */}
-            <div className="flex gap-5 rounded-2xl border border-zinc-800 bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
+            <div className="flex gap-5 rounded-2xl border border-white bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
               <HeartHandshake
                 size={30}
                 className="shrink-0 text-[#c6ff00]"
@@ -206,7 +206,7 @@ const About = () => {
             </div>
 
             {/* Quality */}
-            <div className="flex gap-5 rounded-2xl border border-zinc-800 bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
+            <div className="flex gap-5 rounded-2xl border border-white bg-[#111] p-7 transition hover:border-[#c6ff00]/40">
               <Star
                 size={30}
                 className="shrink-0 text-[#c6ff00]"
@@ -238,8 +238,8 @@ const About = () => {
 
           <div className="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
 
-            <div className="rounded-2xl border border-zinc-800 bg-[#111] p-8 text-center transition hover:-translate-y-1 hover:border-[#c6ff00]/40">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[#c6ff00] text-xl font-bold text-black">
+            <div className="rounded-2xl border border-white bg-[#111] p-8 text-center transition hover:-translate-y-1 hover:border-[#c6ff00]/40">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-[#c6ff00] text-xl font-bold text-black">
                 A
               </div>
 
@@ -252,8 +252,8 @@ const About = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-[#111] p-8 text-center transition hover:-translate-y-1 hover:border-[#c6ff00]/40">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800 text-xl font-bold text-[#c6ff00]">
+            <div className="rounded-2xl border border-white bg-[#111] p-8 text-center ">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-blue-400 text-xl font-bold text-white">
                 P
               </div>
 
@@ -266,8 +266,8 @@ const About = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-[#111] p-8 text-center transition hover:-translate-y-1 hover:border-[#c6ff00]/40">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800 text-xl font-bold text-[#c6ff00]">
+            <div className="rounded-2xl border border-white bg-[#111] p-8 text-center ">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-purple-400 text-xl font-bold text-white">
                 R
               </div>
 
@@ -280,8 +280,8 @@ const About = () => {
               </p>
             </div>
 
-            <div className="rounded-2xl border border-zinc-800 bg-[#111] p-8 text-center transition hover:-translate-y-1 hover:border-[#c6ff00]/40">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-zinc-800 text-xl font-bold text-[#c6ff00]">
+            <div className="rounded-2xl border border-white bg-[#111] p-8 text-center ">
+              <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-xl bg-red-400 text-xl font-bold text-white">
                 S
               </div>
 
@@ -317,7 +317,7 @@ const About = () => {
         </section>
 
         {/* Footer */}
-        <footer className="mt-20 border-t border-zinc-800 pt-8 text-center">
+        <footer className="mt-20 border-t  border-white pt-8 text-center">
           <p className="text-lg font-semibold text-[#c6ff00]">
             SkyMart
           </p>
