@@ -1,19 +1,39 @@
-import React, { useContext } from "react";
-import { ShoppingCart, Check, Star } from "lucide-react";
+import React, { useContext, useState } from "react";
+import { ShoppingCart, Check, Star, Eye } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Auth } from "../context/Auth";
 import { toast } from "react-toastify";
 
+// Helper category badge color styling
+const getCategoryStyle = (category = "") => {
+  const c = category.toLowerCase();
+  if (c.includes("beauty") || c.includes("skin") || c.includes("fragrance")) {
+    return "bg-rose-500/20 text-rose-300 border-rose-500/30";
+  }
+  if (c.includes("electronic") || c.includes("laptop") || c.includes("phone")) {
+    return "bg-sky-500/20 text-sky-300 border-sky-500/30";
+  }
+  if (c.includes("grocer") || c.includes("food")) {
+    return "bg-emerald-500/20 text-emerald-300 border-emerald-500/30";
+  }
+  if (c.includes("furnitur") || c.includes("home")) {
+    return "bg-amber-500/20 text-amber-300 border-amber-500/30";
+  }
+  return "bg-zinc-800/80 text-zinc-300 border-zinc-700/50";
+};
+
 const ProductCard = ({ product }) => {
   const { cartItems, addToCart, setIsCartOpen } = useContext(Auth);
   const navigate = useNavigate();
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const isInCart = cartItems.some((item) => item.id === product.id);
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
     addToCart(product);
     setIsCartOpen(true);
-    toast.success(`${product.title.slice(0, 30)}… added to cart`, {
+    toast.success(`${product.title.slice(0, 26)}… added to cart`, {
       position: "bottom-right",
       autoClose: 2000,
       theme: "dark",
@@ -28,157 +48,192 @@ const ProductCard = ({ product }) => {
     <div
       onClick={handleCardClick}
       className="
+        group
+        relative
+        flex
+        flex-col
         w-full
-        max-w-[275px]
+        max-w-[285px]
         overflow-hidden
-        rounded-[28px]
+        rounded-[24px]
         border
-        border-[#343434]
-        bg-[#111111]
+        border-zinc-800/90
+        bg-[#121212]
         text-white
         transition-all
         duration-300
-        hover:border-lime-500
-        hover:-translate-y-1
-        hover:shadow-[0_8px_30px_rgba(198,255,0,0.08)]
+        hover:border-[#c6ff00]/50
+        hover:-translate-y-1.5
+        hover:shadow-[0_16px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(198,255,0,0.09)]
         cursor-pointer
       "
     >
-      {/* ================= IMAGE SECTION ================= */}
-      <div className="relative h-[220px] bg-white overflow-hidden">
+      {/* ================= IMAGE CONTAINER ================= */}
+      <div className="relative mx-3 mt-3 h-[205px] overflow-hidden rounded-[20px] bg-gradient-to-b from-[#f8f9fa] to-[#eceff1] border border-zinc-700/20">
+        {/* Shimmer skeleton loader until image is loaded */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 shimmer-loading z-0" />
+        )}
 
         {/* Category badge */}
         <span
-          className="
+          className={`
             absolute
-            left-4
-            top-4
+            left-3
+            top-3
             z-10
             rounded-full
-            bg-[#00000080]
-            px-3
-            py-1.5
-            text-[11px]
-            font-semibold
-            text-white
-            backdrop-blur-sm
-          "
+            border
+            px-2.5
+            py-1
+            text-[10px]
+            font-bold
+            uppercase
+            tracking-wider
+            backdrop-blur-md
+            ${getCategoryStyle(product.category)}
+          `}
         >
           {product.category}
         </span>
 
-        {/* Image */}
-        <div className="flex h-full w-full items-center justify-center px-7 py-6">
+        {/* Quick View Icon hint on hover */}
+        <div className="absolute right-3 top-3 z-10 opacity-0 transition-all duration-300 group-hover:opacity-100">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white backdrop-blur-md border border-white/15 shadow-md">
+            <Eye size={14} />
+          </div>
+        </div>
+
+        {/* Product photo */}
+        <div className="flex h-full w-full items-center justify-center p-5">
           <img
             src={product.thumbnail || product.images?.[0]}
             alt={product.title}
-            className="
+            loading="lazy"
+            onLoad={() => setImageLoaded(true)}
+            className={`
               h-full
               w-full
               object-contain
-              transition-transform
+              transition-all
               duration-500
-              hover:scale-110
-            "
+              group-hover:scale-108
+              ${imageLoaded ? "opacity-100" : "opacity-0"}
+            `}
           />
         </div>
       </div>
 
-      {/* ================= DETAILS ================= */}
-      <div className="px-5 py-4">
+      {/* ================= DETAILS FOOTER ================= */}
+      <div className="flex flex-1 flex-col justify-between p-4.5">
+        <div>
+          {/* Subtitle / Category text */}
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
+            {product.brand || product.category}
+          </p>
 
-        {/* Category label */}
-        <p className="mb-2 text-[12px] font-semibold uppercase tracking-widest text-[#555]">
-          {product.category}
-        </p>
+          {/* Title */}
+          <h3
+            className="
+              mt-1
+              min-h-[42px]
+              line-clamp-2
+              text-[14px]
+              font-semibold
+              leading-snug
+              text-zinc-100
+              transition-colors
+              group-hover:text-[#c6ff00]
+            "
+          >
+            {product.title}
+          </h3>
 
-        {/* Title */}
-        <h2
-          className="
-            mb-3
-            min-h-[40px]
-            line-clamp-2
-            text-[15px]
-            font-semibold
-            leading-[20px]
-            text-[#dddddd]
-          "
-        >
-          {product.title}
-        </h2>
-
-        {/* Rating */}
-        <div className="flex items-center gap-2 mb-3">
-          <div className="flex items-center gap-[2px]">
-            {[1, 2, 3, 4, 5].map((star) => (
-              <Star
-                key={star}
-                size={13}
-                strokeWidth={2}
-                fill={star <= Math.round(product.rating) ? "#facc15" : "none"}
-                color="#facc15"
-              />
-            ))}
+          {/* Rating */}
+          <div className="mt-2.5 flex items-center gap-1.5">
+            <div className="flex items-center gap-0.5">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Star
+                  key={star}
+                  size={12}
+                  strokeWidth={1.5}
+                  fill={star <= Math.round(product.rating) ? "#facc15" : "none"}
+                  color="#facc15"
+                />
+              ))}
+            </div>
+            <span className="text-[11px] font-semibold text-zinc-300">
+              {product.rating?.toFixed(1)}
+            </span>
+            <span className="text-[11px] text-zinc-500">
+              ({product.reviews?.length || 0})
+            </span>
           </div>
-          <span className="text-[12px] text-[#666]">
-            ({product.reviews?.length || 0})
-          </span>
         </div>
 
         {/* Divider */}
-        <div className="mb-3 h-px bg-[#252525]" />
+        <div className="my-3.5 h-px bg-zinc-800/80" />
 
-        {/* Price + Button */}
+        {/* Price & Add to Cart button */}
         <div className="flex items-center justify-between">
-          <span className="text-[22px] font-bold text-lime-400">
-            ${product.price}
-          </span>
+          <div>
+            <span className="text-[20px] font-bold text-[#c6ff00] font-display">
+              ${product.price}
+            </span>
+          </div>
 
           {isInCart ? (
             <button
               onClick={handleAddToCart}
+              aria-label="Item already in cart"
               className="
                 flex
                 items-center
-                gap-2
-                rounded-full
+                gap-1.5
+                rounded-xl
                 border
-                border-green-900
-                bg-[#062b17]
-                px-4
+                border-emerald-500/40
+                bg-emerald-500/20
+                px-3.5
                 py-2
-                text-sm
-                font-semibold
-                text-green-400
-                transition
-                hover:bg-[#093d21]
+                text-xs
+                font-bold
+                text-emerald-400
+                transition-all
+                hover:bg-emerald-500/30
+                cursor-pointer
               "
             >
-              <Check size={14} />
-              Added
+              <Check size={13} />
+              <span>Added</span>
             </button>
           ) : (
             <button
               onClick={handleAddToCart}
+              aria-label={`Add ${product.title} to cart`}
               className="
                 flex
                 items-center
-                gap-2
-                rounded-full
-                bg-lime-400
-                px-4
+                gap-1.5
+                rounded-xl
+                bg-[#c6ff00]
+                px-3.5
                 py-2
-                text-sm
-                font-semibold
+                text-xs
+                font-bold
                 text-black
-                transition
+                shadow-sm
+                transition-all
+                duration-200
                 hover:scale-105
-                hover:bg-lime-300
+                hover:bg-[#b3ea00]
+                hover:shadow-[0_0_15px_rgba(198,255,0,0.3)]
                 active:scale-95
+                cursor-pointer
               "
             >
-              <ShoppingCart size={14} />
-              Add
+              <ShoppingCart size={13} />
+              <span>Add</span>
             </button>
           )}
         </div>

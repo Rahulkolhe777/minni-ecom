@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router";
 import {
   ShoppingCart,
@@ -10,48 +10,73 @@ import {
   Home as HomeIcon,
   Dumbbell,
   Watch,
-  Package,
-  ShoppingBag,
-  TrendingUp,
-  Tag,
-  DollarSign,
+  Truck,
+  ShieldCheck,
+  RotateCcw,
+  Headphones,
+  Sparkles,
+  Check,
 } from "lucide-react";
 import { Auth } from "../context/Auth";
 import axios from "axios";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BROAD CATEGORY CONFIG  (6 display categories)
+// BROAD CATEGORY CONFIG  (6 display categories with distinct colors)
 // ─────────────────────────────────────────────────────────────────────────────
 const BROAD_CATEGORIES = [
   {
     name: "Electronics",
     icon: Laptop,
     slugs: ["smartphones","laptops","tablets","mobile-accessories","computers","cameras","audio","tv","gaming"],
+    colorClass: "text-sky-400",
+    bgClass: "bg-sky-400/10",
+    borderHover: "hover:border-sky-500/50 hover:shadow-[0_8px_25px_rgba(56,189,248,0.12)]",
+    iconBgHover: "group-hover:bg-sky-400/20",
   },
   {
     name: "Clothing",
     icon: Shirt,
     slugs: ["mens-shirts","womens-dresses","mens-shoes","womens-shoes","tops","jeans","activewear","underwear"],
+    colorClass: "text-rose-400",
+    bgClass: "bg-rose-400/10",
+    borderHover: "hover:border-rose-500/50 hover:shadow-[0_8px_25px_rgba(251,113,133,0.12)]",
+    iconBgHover: "group-hover:bg-rose-400/20",
   },
   {
     name: "Furniture",
     icon: HomeIcon,
     slugs: ["furniture","sofas","beds","tables","chairs"],
+    colorClass: "text-amber-400",
+    bgClass: "bg-amber-400/10",
+    borderHover: "hover:border-amber-500/50 hover:shadow-[0_8px_25px_rgba(251,191,36,0.12)]",
+    iconBgHover: "group-hover:bg-amber-400/20",
   },
   {
     name: "Home",
     icon: HomeIcon,
     slugs: ["home-decoration","kitchen-accessories","bathroom-accessories","home-improvement","garden","lighting"],
+    colorClass: "text-emerald-400",
+    bgClass: "bg-emerald-400/10",
+    borderHover: "hover:border-emerald-500/50 hover:shadow-[0_8px_25px_rgba(52,211,153,0.12)]",
+    iconBgHover: "group-hover:bg-emerald-400/20",
   },
   {
     name: "Sports",
     icon: Dumbbell,
     slugs: ["sports-accessories","fitness","outdoor","yoga","cycling"],
+    colorClass: "text-orange-400",
+    bgClass: "bg-orange-400/10",
+    borderHover: "hover:border-orange-500/50 hover:shadow-[0_8px_25px_rgba(251,146,60,0.12)]",
+    iconBgHover: "group-hover:bg-orange-400/20",
   },
   {
     name: "Accessories",
     icon: Watch,
     slugs: ["mens-watches","womens-watches","sunglasses","womens-bags","womens-jewellery","mens-jewellery","fragrances","skincare","beauty","hair-care"],
+    colorClass: "text-violet-400",
+    bgClass: "bg-violet-400/10",
+    borderHover: "hover:border-violet-500/50 hover:shadow-[0_8px_25px_rgba(167,139,250,0.12)]",
+    iconBgHover: "group-hover:bg-violet-400/20",
   },
 ];
 
@@ -66,73 +91,92 @@ const getBroadCategoryName = (rawCat) => {
 // Greeting based on time
 const getGreeting = () => {
   const h = new Date().getHours();
-  if (h < 12) return "GOOD MORNING ☀️";
-  if (h < 17) return "GOOD AFTERNOON 👋";
-  return "GOOD EVENING 🤌";
+  if (h < 12) return "Good Morning";
+  if (h < 17) return "Good Afternoon";
+  return "Good Evening";
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HERO
+// HERO SECTION WITH GRADIENT MESH & PRODUCT PREVIEW TEASER
 // ─────────────────────────────────────────────────────────────────────────────
 const HeroSection = ({ user, productCount }) => {
   const navigate = useNavigate();
-  const firstName = user?.name?.split(" ")[0] || user?.email?.split("@")[0] || "there";
+  const rawName = user?.name?.trim() || user?.email?.split("@")[0] || "Explorer";
+  const firstName = rawName.split(" ")[0];
 
   return (
-    <section className="px-6 pt-8 pb-6 max-w-7xl mx-auto">
-      <div className="rounded-3xl border border-zinc-800 bg-[#111] p-8 lg:p-10 relative overflow-hidden">
+    <section className="px-6 pt-8 pb-4 max-w-7xl mx-auto">
+      <div className="relative overflow-hidden rounded-3xl border border-zinc-800/80 bg-gradient-to-br from-[#12180c] via-[#0f1011] to-[#0a0a0a] p-8 md:p-12 lg:p-14 shadow-[0_20px_60px_rgba(0,0,0,0.4)]">
+        {/* Subtle Ambient Radial Glows */}
+        <div className="pointer-events-none absolute -right-16 -top-20 h-96 w-96 rounded-full bg-[#c6ff00]/10 blur-[130px]" />
+        <div className="pointer-events-none absolute -left-20 -bottom-20 h-80 w-80 rounded-full bg-emerald-500/5 blur-[100px]" />
 
-        {/* subtle bg glow */}
-        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-[#c6ff00]/5 blur-3xl" />
+        {/* Decorative Grid Pattern Overlay */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03] [background-image:linear-gradient(to_right,#fff_1px,transparent_1px),linear-gradient(to_bottom,#fff_1px,transparent_1px)] [background-size:32px_32px]" />
 
-        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+        <div className="relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-10">
+          {/* Left Column */}
+          <div className="flex-1 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#c6ff00]/30 bg-[#c6ff00]/10 mb-6 backdrop-blur-md">
+              <Sparkles size={13} className="text-[#c6ff00]" />
+              <span className="text-xs font-bold uppercase tracking-widest text-[#c6ff00]">
+                {getGreeting()}
+              </span>
+            </div>
 
-          {/* Left */}
-          <div className="flex-1">
-            <p className="mb-3 text-xs font-bold uppercase tracking-widest text-[#c6ff00]">
-              {getGreeting()}
-            </p>
-
-            <h1 className="text-4xl font-black leading-tight text-white lg:text-5xl">
-              Welcome back,<br />
-              <span className="text-[#c6ff00]">{firstName}!</span>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white font-display leading-[1.1]">
+              Welcome back,{" "}
+              <span className="text-[#c6ff00] inline-block max-w-[280px] sm:max-w-md truncate align-bottom drop-shadow-[0_0_20px_rgba(198,255,0,0.25)]" title={firstName}>
+                {firstName}!
+              </span>
             </h1>
 
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-zinc-400">
-              Discover today's picks — hand-curated products across electronics, fashion, and more.
+            <p className="mt-5 max-w-lg text-base sm:text-lg leading-relaxed text-zinc-400">
+              Discover today's curated lineup across premium tech, everyday essentials, and fashion styles with lightning-fast delivery.
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap items-center gap-4">
               <button
                 onClick={() => navigate("/main/shop")}
-                className="flex items-center gap-2 rounded-xl bg-[#c6ff00] px-6 py-3 text-sm font-bold text-black transition hover:bg-lime-300 hover:scale-105 active:scale-95"
+                className="flex items-center gap-2.5 rounded-xl bg-[#c6ff00] px-7 py-3.5 text-sm font-bold text-black shadow-[0_0_20px_rgba(198,255,0,0.25)] transition-all duration-200 hover:bg-[#b3ea00] hover:scale-105 active:scale-95 cursor-pointer"
               >
-                Shop Now <ArrowRight size={16} />
+                <span>Shop Catalog</span>
+                <ArrowRight size={16} />
               </button>
+
               <button
-                onClick={() => navigate("/main/shop")}
-                className="flex items-center gap-2 rounded-xl border border-zinc-700 px-6 py-3 text-sm font-semibold text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+                onClick={() => navigate("/main/about")}
+                className="flex items-center gap-2 rounded-xl border border-zinc-700/80 bg-zinc-900/60 px-6 py-3.5 text-sm font-semibold text-zinc-300 backdrop-blur-sm transition-all duration-200 hover:border-zinc-500 hover:text-white cursor-pointer"
               >
-                View All Products
+                <span>Why SkyMart?</span>
               </button>
             </div>
           </div>
 
-          {/* Right — stat cards */}
-          <div className="flex flex-row gap-3 lg:flex-col lg:gap-4 lg:min-w-[180px]">
-            <div className="flex-1 rounded-2xl bg-[#c6ff00] p-5 text-center lg:flex-none">
-              <p className="text-3xl font-black text-black leading-none">
-                {productCount > 0 ? `${productCount}+` : "…"}
+          {/* Right Column — Store Highlight Cards */}
+          <div className="flex flex-row sm:flex-row lg:flex-col gap-4 min-w-[220px]">
+            <div className="flex-1 rounded-2xl border border-[#c6ff00]/30 bg-gradient-to-br from-[#c6ff00]/15 to-[#c6ff00]/5 p-6 backdrop-blur-md text-left transition hover:scale-[1.02] duration-300">
+              <div className="flex items-center gap-2 mb-2 text-[#c6ff00]">
+                <Zap size={18} className="fill-current" />
+                <span className="text-xs font-bold uppercase tracking-wider">Store Catalog</span>
+              </div>
+              <p className="text-3xl lg:text-4xl font-black text-white font-display leading-none">
+                {productCount > 0 ? `${productCount}+` : "190+"}
               </p>
-              <p className="mt-1 text-xs font-semibold text-black/70">Products Available</p>
+              <p className="mt-1 text-xs text-zinc-400 font-medium">Verified Active Products</p>
             </div>
 
-            <div className="flex-1 rounded-2xl border border-zinc-700 bg-[#1a1a1a] p-5 text-center lg:flex-none">
-              <p className="text-2xl font-black text-white leading-none">Free</p>
-              <p className="mt-1 text-xs text-zinc-500">Delivery on ₹999+</p>
+            <div className="flex-1 rounded-2xl border border-zinc-800 bg-zinc-900/80 p-6 backdrop-blur-md text-left transition hover:scale-[1.02] duration-300">
+              <div className="flex items-center gap-2 mb-2 text-emerald-400">
+                <Truck size={18} />
+                <span className="text-xs font-bold uppercase tracking-wider">Fast Shipping</span>
+              </div>
+              <p className="text-3xl lg:text-4xl font-black text-white font-display leading-none">
+                Free
+              </p>
+              <p className="mt-1 text-xs text-zinc-400 font-medium">On orders over $50</p>
             </div>
           </div>
-
         </div>
       </div>
     </section>
@@ -140,62 +184,58 @@ const HeroSection = ({ user, productCount }) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QUICK STATS BAR
+// CUSTOMER TRUST INDICATORS (Replaced admin stat tiles)
 // ─────────────────────────────────────────────────────────────────────────────
-const QuickStatsBar = ({ cartItems, productCount }) => {
-  const cartCount = cartItems.reduce((s, i) => s + i.quantity, 0);
-  const cartValue = cartItems.reduce((s, i) => s + i.price * i.quantity, 0);
-
-  const stats = [
+const TrustIndicatorsBar = () => {
+  const indicators = [
     {
-      icon: ShoppingBag,
-      value: cartCount,
-      label: "Cart Items",
-      sub: "In your bag",
-      color: "text-[#c6ff00]",
+      icon: Truck,
+      title: "Free Express Delivery",
+      desc: "On all orders above $50",
+      accent: "text-[#c6ff00]",
       bg: "bg-[#c6ff00]/10",
+      border: "hover:border-[#c6ff00]/30",
     },
     {
-      icon: DollarSign,
-      value: `$${cartValue.toFixed(2)}`,
-      label: "Cart Value",
-      sub: "Ready to checkout",
-      color: "text-blue-400",
-      bg: "bg-blue-400/10",
+      icon: ShieldCheck,
+      title: "100% Secure Checkout",
+      desc: "256-bit SSL encrypted payments",
+      accent: "text-sky-400",
+      bg: "bg-sky-400/10",
+      border: "hover:border-sky-500/30",
     },
     {
-      icon: Star,
-      value: productCount,
-      label: "Top Products",
-      sub: "Highly rated",
-      color: "text-yellow-400",
-      bg: "bg-yellow-400/10",
+      icon: RotateCcw,
+      title: "30-Day Hassle Returns",
+      desc: "Full money-back guarantee",
+      accent: "text-emerald-400",
+      bg: "bg-emerald-400/10",
+      border: "hover:border-emerald-500/30",
     },
     {
-      icon: Tag,
-      value: 6,
-      label: "Categories",
-      sub: "To explore",
-      color: "text-purple-400",
-      bg: "bg-purple-400/10",
+      icon: Headphones,
+      title: "24/7 Priority Support",
+      desc: "Live dedicated customer team",
+      accent: "text-violet-400",
+      bg: "bg-violet-400/10",
+      border: "hover:border-violet-500/30",
     },
   ];
 
   return (
-    <section className="px-6 pb-8 max-w-7xl mx-auto">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {stats.map(({ icon: Icon, value, label, sub, color, bg }) => (
+    <section className="px-6 py-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {indicators.map(({ icon: Icon, title, desc, accent, bg, border }) => (
           <div
-            key={label}
-            className="rounded-2xl border border-zinc-800 bg-[#111] px-5 py-4 flex items-center gap-4 transition hover:border-zinc-700"
+            key={title}
+            className={`flex items-center gap-4 rounded-2xl border border-zinc-800/80 bg-zinc-900/40 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 ${border}`}
           >
-            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${bg}`}>
-              <Icon size={18} className={color} />
+            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${bg} ${accent}`}>
+              <Icon size={22} />
             </div>
-            <div>
-              <p className="text-xl font-bold text-white leading-tight">{value}</p>
-              <p className="text-xs font-semibold text-zinc-400">{label}</p>
-              <p className="text-[11px] text-zinc-600">{sub}</p>
+            <div className="min-w-0">
+              <h3 className="text-sm font-bold text-zinc-100 font-display truncate">{title}</h3>
+              <p className="text-xs text-zinc-400 mt-0.5 truncate">{desc}</p>
             </div>
           </div>
         ))}
@@ -205,7 +245,7 @@ const QuickStatsBar = ({ cartItems, productCount }) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SHOP BY CATEGORY  (6 broad categories, show item count)
+// SHOP BY CATEGORY (Vibrant color-coded tiles)
 // ─────────────────────────────────────────────────────────────────────────────
 const CategorySection = ({ products }) => {
   const navigate = useNavigate();
@@ -224,37 +264,46 @@ const CategorySection = ({ products }) => {
   );
 
   return (
-    <section className="px-6 pb-10 max-w-7xl mx-auto">
+    <section className="px-6 py-6 max-w-7xl mx-auto">
       <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-xl font-black text-white">Shop by Category</h2>
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight text-white font-display">
+            Shop by Category
+          </h2>
+          <p className="text-xs text-zinc-400 mt-1">Explore our most popular departments</p>
+        </div>
         <button
           onClick={() => navigate("/main/shop")}
-          className="flex items-center gap-1 text-sm font-semibold text-[#c6ff00] hover:underline transition"
+          className="group flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#c6ff00] hover:underline cursor-pointer"
         >
-          View All <ArrowRight size={14} />
+          <span>All Departments</span>
+          <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5" />
         </button>
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-        {visibleCategories.map(({ name, icon: Icon }) => {
+        {visibleCategories.map(({ name, icon: Icon, colorClass, bgClass, borderHover, iconBgHover }) => {
           const count = categoryCounts[name] || 0;
           return (
             <button
               key={name}
               onClick={() => navigate(`/main/shop?category=${encodeURIComponent(name)}`)}
-              className="
-                group flex flex-col items-center gap-2 rounded-2xl
-                border border-zinc-800 bg-[#111] p-5 text-center
-                transition-all duration-200
-                hover:border-[#c6ff00]/30 hover:-translate-y-1
-                hover:shadow-[0_8px_20px_rgba(198,255,0,0.06)]
-              "
+              className={`
+                group flex flex-col items-center gap-3 rounded-2xl
+                border border-zinc-800/90 bg-[#121212] p-5 text-center
+                transition-all duration-300
+                hover:-translate-y-1
+                cursor-pointer
+                ${borderHover}
+              `}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-zinc-800 transition group-hover:bg-[#c6ff00]/15">
-                <Icon size={22} className="text-zinc-300 group-hover:text-[#c6ff00] transition" />
+              <div className={`flex h-13 w-13 items-center justify-center rounded-2xl ${bgClass} ${colorClass} transition-transform duration-300 group-hover:scale-110 ${iconBgHover}`}>
+                <Icon size={24} />
               </div>
-              <p className="text-sm font-bold text-zinc-200 group-hover:text-white transition">{name}</p>
-              <p className="text-xs text-zinc-500">{count} items</p>
+              <div>
+                <p className="text-sm font-bold text-zinc-200 group-hover:text-white transition font-display">{name}</p>
+                <p className="text-xs text-zinc-500 mt-0.5">{count} items</p>
+              </div>
             </button>
           );
         })}
@@ -264,35 +313,53 @@ const CategorySection = ({ products }) => {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// PRODUCT LIST ROW  (used in Top Rated + New Arrivals)
+// PRODUCT LIST ROW
 // ─────────────────────────────────────────────────────────────────────────────
 const MiniProductRow = ({ product, onAdd, isInCart }) => {
   const navigate = useNavigate();
+  const [imgLoaded, setImgLoaded] = useState(false);
+
   return (
     <div
       onClick={() => navigate(`/main/shop/${product.id}`)}
-      className="flex items-center gap-3 py-3 border-b border-zinc-800 last:border-0 cursor-pointer hover:bg-zinc-900/50 rounded-xl px-1 transition"
+      className="flex items-center gap-3.5 p-2.5 rounded-xl transition-all duration-200 hover:bg-zinc-800/50 cursor-pointer group"
     >
-      <div className="h-12 w-12 shrink-0 rounded-xl bg-white flex items-center justify-center overflow-hidden">
+      <div className="relative h-14 w-14 shrink-0 rounded-xl bg-[#f3f4f6] flex items-center justify-center overflow-hidden border border-zinc-700/40">
+        {!imgLoaded && <div className="absolute inset-0 shimmer-loading" />}
         <img
           src={product.thumbnail || product.images?.[0]}
           alt={product.title}
-          className="h-full w-full object-contain p-1"
+          onLoad={() => setImgLoaded(true)}
+          className={`h-full w-full object-contain p-1.5 transition-all duration-300 group-hover:scale-105 ${
+            imgLoaded ? "opacity-100" : "opacity-0"
+          }`}
         />
       </div>
+
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-zinc-200 line-clamp-1">{product.title}</p>
-        <p className="text-[13px] font-bold text-[#c6ff00]">${product.price}</p>
+        <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">{product.category}</p>
+        <p className="text-sm font-semibold text-zinc-100 line-clamp-1 group-hover:text-[#c6ff00] transition">
+          {product.title}
+        </p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <p className="text-sm font-bold text-[#c6ff00] font-display">${product.price}</p>
+          <span className="text-[11px] text-zinc-500">★ {product.rating?.toFixed(1)}</span>
+        </div>
       </div>
+
       <button
-        onClick={(e) => { e.stopPropagation(); onAdd(product); }}
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition ${
+        onClick={(e) => {
+          e.stopPropagation();
+          onAdd(product);
+        }}
+        aria-label="Add product to cart"
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-all duration-200 active:scale-90 cursor-pointer ${
           isInCart
-            ? "bg-[#062b17] border border-green-900 text-green-400"
-            : "bg-[#c6ff00]/10 border border-[#c6ff00]/20 text-[#c6ff00] hover:bg-[#c6ff00]/20"
+            ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-400"
+            : "bg-zinc-800 text-zinc-300 hover:bg-[#c6ff00] hover:text-black hover:shadow-[0_0_15px_rgba(198,255,0,0.2)]"
         }`}
       >
-        <ShoppingCart size={14} />
+        {isInCart ? <Check size={15} /> : <ShoppingCart size={15} />}
       </button>
     </div>
   );
@@ -317,42 +384,51 @@ const ProductListsSection = ({ products, cartItems, addToCart, setIsCartOpen }) 
   const isInCart = (id) => cartItems.some((i) => i.id === id);
 
   const ListCard = ({ title, icon: Icon, items, filterSort }) => (
-    <div className="rounded-2xl border border-zinc-800 bg-[#111] p-5 flex-1">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Icon size={16} className="text-[#c6ff00]" />
-          <h3 className="font-bold text-white">{title}</h3>
+    <div className="rounded-3xl border border-zinc-800/90 bg-[#121212] p-6 flex-1 shadow-lg">
+      <div className="mb-5 flex items-center justify-between pb-4 border-b border-zinc-800/80">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#c6ff00]/10 text-[#c6ff00]">
+            <Icon size={16} />
+          </div>
+          <h3 className="text-lg font-bold text-white font-display">{title}</h3>
         </div>
         <button
           onClick={() => navigate(`/main/shop${filterSort ? `?sort=${filterSort}` : ""}`)}
-          className="flex items-center gap-1 text-xs font-semibold text-zinc-500 hover:text-[#c6ff00] transition"
+          className="flex items-center gap-1 text-xs font-semibold text-zinc-400 hover:text-[#c6ff00] transition cursor-pointer"
         >
-          See all <ArrowRight size={12} />
+          <span>View all</span>
+          <ArrowRight size={12} />
         </button>
       </div>
-      {items.map((p) => (
-        <MiniProductRow
-          key={p.id}
-          product={p}
-          onAdd={(product) => { addToCart(product); setIsCartOpen(true); }}
-          isInCart={isInCart(p.id)}
-        />
-      ))}
+
+      <div className="space-y-1">
+        {items.map((p) => (
+          <MiniProductRow
+            key={p.id}
+            product={p}
+            onAdd={(product) => {
+              addToCart(product);
+              setIsCartOpen(true);
+            }}
+            isInCart={isInCart(p.id)}
+          />
+        ))}
+      </div>
     </div>
   );
 
   return (
-    <section className="px-6 pb-16 max-w-7xl mx-auto">
-      <div className="flex flex-col gap-5 lg:flex-row">
-        <ListCard title="Top Rated" icon={Star} items={topRated} filterSort="rating" />
-        <ListCard title="New Arrivals" icon={Zap} items={newArrivals} />
+    <section className="px-6 py-6 pb-16 max-w-7xl mx-auto">
+      <div className="flex flex-col gap-6 lg:flex-row">
+        <ListCard title="Highest Rated" icon={Star} items={topRated} filterSort="rating" />
+        <ListCard title="Fresh Arrivals" icon={Zap} items={newArrivals} />
       </div>
     </section>
   );
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
-// HOME PAGE
+// HOME PAGE ROOT
 // ─────────────────────────────────────────────────────────────────────────────
 const HomePage = () => {
   const { productData, setProductData, cartItems, loggedInUser, addToCart, setIsCartOpen } =
@@ -369,10 +445,9 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-
       <HeroSection user={loggedInUser} productCount={productData.length} />
 
-      <QuickStatsBar cartItems={cartItems} productCount={productData.length} />
+      <TrustIndicatorsBar />
 
       <CategorySection products={productData} />
 
@@ -384,18 +459,28 @@ const HomePage = () => {
       />
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800 px-6 py-8 text-center">
-        <div className="mb-2 flex items-center justify-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#c6ff00]">
-            <Zap size={14} fill="currentColor" className="text-black" />
+      <footer className="border-t border-zinc-800/80 bg-[#0d0d0d] px-6 py-10 text-center">
+        <div className="mx-auto max-w-7xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#c6ff00]">
+              <Zap size={15} className="fill-current text-black" />
+            </div>
+            <span className="font-bold text-white font-display">
+              Sky<span className="text-[#c6ff00]">Mart</span>
+            </span>
           </div>
-          <span className="font-bold text-white">
-            Sky<span className="text-[#c6ff00]">Mart</span>
-          </span>
-        </div>
-        <p className="text-xs text-zinc-600">© 2025 SkyMart — Built with React + Vite + TailwindCSS</p>
-      </footer>
 
+          <p className="text-xs text-zinc-500">
+            © 2025 SkyMart Inc. Built with React + Vite + TailwindCSS
+          </p>
+
+          <div className="flex items-center gap-6 text-xs text-zinc-400">
+            <span className="hover:text-white cursor-pointer transition">Privacy Policy</span>
+            <span className="hover:text-white cursor-pointer transition">Terms of Service</span>
+            <span className="hover:text-white cursor-pointer transition">Help Center</span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
