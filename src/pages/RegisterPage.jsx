@@ -4,7 +4,7 @@ import { useAuthHook } from "../hooks/useAuthHook";
 const RegisterPage = () => {
 
 
-  let {handleSubmit,register,reset,registerFormSubmit,navigate,errors,toast} = useAuthHook();
+  let {handleSubmit,register,registerFormSubmit,navigate,errors} = useAuthHook();
 
 
 

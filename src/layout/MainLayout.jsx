@@ -1,16 +1,19 @@
 import React, { useContext } from 'react'
-import { Outlet, useNavigate } from 'react-router'
-import { Auth } from '../context/AuthContext'
-import { toast } from "react-toastify";
-import Navbar from '../components/Navbar';
+import { Outlet } from 'react-router'
+import Navbar from '../components/Navbar'
+import CartScreen from '../pages/CartScreen'
+import { Auth } from '../context/Auth'
 
 const MainLayout = () => {
-
+  const { isCartOpen, setIsCartOpen } = useContext(Auth)
 
   return (
-    <div>
-      <Navbar/>
-      <Outlet/>
+    <div className="min-h-screen bg-[#0a0a0a]">
+      <Navbar />
+      <Outlet />
+      {isCartOpen && (
+        <CartScreen onClose={() => setIsCartOpen(false)} />
+      )}
     </div>
   )
 }

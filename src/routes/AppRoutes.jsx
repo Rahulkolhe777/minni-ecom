@@ -10,20 +10,22 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import PublicRoute from "./PublicRoute";
 import About from "../pages/About";
 import ProductPage from "../pages/ProductPage";
+import HomePage from "../pages/HomePage";
+import ProductDetailsPage from "../pages/ProductDetailsPage";
 
 
 const AppRoutes = () => {
   let router = createBrowserRouter([
+    // ── PUBLIC ROUTES (login / register) ─────────────────────────────────────
     {
       path: "/",
       element: <PublicRoute />,
       children: [
         {
-          path: "",
           element: <AuthLayout />,
           children: [
             {
-              path: "",
+              index: true,
               element: <LoginPage />,
             },
             {
@@ -34,35 +36,41 @@ const AppRoutes = () => {
         },
       ],
     },
+
+    // ── PROTECTED ROUTES (everything under /main) ─────────────────────────────
     {
       path: "/main",
       element: <ProtectedRoutes />,
       children: [
         {
-          path: "",
+          // Pathless layout route — wraps all protected pages with Navbar
           element: <MainLayout />,
-          children:[
+          children: [
             {
-              path:'about',
-              element:<About/>
+              index: true,          // matches /main exactly
+              element: <HomePage />,
             },
             {
-              path:'shop',
-              element:<ProductPage />
-            }
-          ]
+              path: "about",
+              element: <About />,
+            },
+            {
+              path: "shop",
+              element: <ProductPage />,
+            },
+            {
+              path: "shop/:productId",   // matches /main/shop/1, /main/shop/42 etc.
+              element: <ProductDetailsPage />,
+            },
+          ],
         },
       ],
     },
+
+    // ── FALLBACK ─────────────────────────────────────────────────────────────
     {
       path: "*",
-      element: <PublicRoute />,
-      children: [
-        {
-          path: "*",
-          element: <Navigate to="/" replace />,
-        },
-      ],
+      element: <Navigate to="/" replace />,
     },
   ]);
 

@@ -5,7 +5,7 @@ import { Auth } from '../context/AuthContext'
 const ProtectedRoutes = () => {
   const{ loggedInUser } = useContext(Auth)
 
-  console.log("protected user:",loggedInUser)
+  
   if (!loggedInUser){
     return <Navigate to={"/"}/>;
   }

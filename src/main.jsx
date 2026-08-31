@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import AppRoutes from './routes/AppRoutes.jsx'
 import { AuthProvider } from './context/AuthContext.jsx'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 
 

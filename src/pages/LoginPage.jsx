@@ -5,11 +5,9 @@ const LoginPage = () => {
   let {
     handleSubmit,
     register,
-    reset,
     loginFormSubmit,
     navigate,
     errors,
-    toast,
   } = useAuthHook();
 
   return (
